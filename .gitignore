@@ -1,9 +1,11 @@
 /HappyFunTimes/
 /public/games/wraslin/Unity/Library/
+/public/games/wraslin/Unity/Plugins/
 /public/games/wraslin/Unity/Temp/
 /public/games/wraslin/Unity/Assets/Standard Assets/
 /public/games/wraslin/Unity/Assets/Plugins/
 public/games/wraslin/Unity/Assets/Scripts/HappyFunTimes/
+public/games/wraslin/pixi/pixi.js-master/
 
 node_modules
 .DS_Store

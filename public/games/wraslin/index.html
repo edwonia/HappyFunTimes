@@ -41,11 +41,12 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
   <meta name="format-detection" content="telephone=no" />
-  <title>Simple Controls</title>
-  <link rel="stylesheet" href="../css/samples.css">
-  <link rel="stylesheet" href="css/simple.css">
+  <title>HappyFunWraslin Controls</title>
+  <link rel="stylesheet" href="../css/controllers.css">
+  <link rel="stylesheet" href="css/controller.css">
   <link href="/hft-icon.png" rel="shortcut icon" type="image/png">
-<script data-main="scripts/simplecontroller.js" src="../scripts/require.js"></script>
+<script src="bin/pixi.dev.js"></script>
+<script data-main="scripts/controller.js" src="../scripts/require.js"></script>
 <script>
 requirejs.config({
   shim: {
@@ -65,14 +66,7 @@ requirejs.config({
 <div id="hft-everything">
   <div id="hft-content">
         <!-- this is inserted into index.html by build.py -->
-    <div id="gamearea" class="fixheight">
-      <h1 id="gamestatus">status</h1>
-      <div id="display" class="hft-fullcenter fixheight">
-        <div id="input" class="hft-instruction hft-fullcenter">Touch to Move</div>
-      </div>
-      <div id="inputarea"  class="hft-fullcenter fixheight"></div>
-    </div>
-
+    <div id="controller"></div>
     <div id="hft-menu"><img src="../assets/gear-icon.svg"></div>
     <div id="hft-disconnected">
       <div class="hft-fullcenter">
