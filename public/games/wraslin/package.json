@@ -1,0 +1,15 @@
+{
+  "name": "HappyFunWraslin",
+  "description": "Pump yourself to the max and dominate your friends' bodies",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+  },
+  "happyFunTimes": {
+    "gameType": "Unity3D",
+    "screenshotUrl": "wraslin-thumb.jpg",
+    "gameExecutable": "unitygame",
+    "useControllerTemplate": true,
+    "useGameTemplate": false
+  }
+}

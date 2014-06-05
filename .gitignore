@@ -1,3 +1,10 @@
+/HappyFunTimes/
+/public/games/wraslin/Unity/Library/
+/public/games/wraslin/Unity/Temp/
+/public/games/wraslin/Unity/Assets/Standard Assets/
+/public/games/wraslin/Unity/Assets/Plugins/
+public/games/wraslin/Unity/Assets/Scripts/HappyFunTimes/
+
 node_modules
 .DS_Store
 *~
@@ -17,4 +24,7 @@ temp
 *.vpw
 *.vpwhistu
 *.vtg
+*.csproj
+*.unityproj
+*.psd
 
