@@ -29,4 +29,7 @@ temp
 *.csproj
 *.unityproj
 *.psd
+*.ai
+*.sln
+
 

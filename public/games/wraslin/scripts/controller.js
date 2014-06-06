@@ -43,6 +43,9 @@ var main = function(
   var globals = {
     debug: false,
   };
+
+  var dPadSize = 75;
+
   Misc.applyUrlSettings(globals);
   MobileHacks.fixHeightHack();
 
@@ -67,46 +70,106 @@ var main = function(
 
   requestAnimFrame(animate);
 
-  // create a texture from an image path
-  var bunnyTex = PIXI.Texture.fromImage("bunny.png");
-  var bunnyDownTex = PIXI.Texture.fromImage("bunny-down.png");
+  var arrowTex = PIXI.Texture.fromImage("assets/arrow.png");
+  var arrowDownTex = PIXI.Texture.fromImage("assets/arrow-down.png");
+  var buttonTex = PIXI.Texture.fromImage("assets/circle.png");
+  var buttonDownTex = PIXI.Texture.fromImage("assets/circle-down.png");
 
   // create a new Sprite using the texture
-  var bunny = new PIXI.Sprite(bunnyTex);
+  var arrows = new Array();
 
-  // enable button
-  bunny.buttonMode=true;
-  bunny.interactive = true;
-  // is the tile selected?
-  bunny.isSelected=false;
+  for (var i=0;i<4;i++) {
+    arrows[i] = new PIXI.Sprite(arrowTex);
+    arrows[i].buttonMode=true;
+    arrows[i].interactive=true;
+    arrows[i].isSelected=false;
+    arrows[i].anchor.x = 0.5;
+    arrows[i].anchor.y = 0.5;
+    arrows[i].position.x = 100;
+    arrows[i].position.y = 170;
+    arrows[i].height = 75;
+    arrows[i].width = 75;
+    stage.addChild(arrows[i]);
+  }
 
-  // touch event handlers
-  bunny.mousedown = bunny.touchstart = function(data) {
+  var button = new PIXI.Sprite(buttonTex);
+  button.buttonMode=true;
+  button.interactive=true;
+  button.isSelected=false;
+  button.anchor.x = 0.5;
+  button.anchor.y = 0.5;
+  button.position.x = 325;
+  button.position.y = 170;
+  button.height = 150;
+  button.width = 120;
+  stage.addChild(button);
 
-      this.setTexture(bunnyDownTex);
+  arrows[0].position.x -= dPadSize;
+  arrows[0].rotation = Math.PI/2;
+  arrows[1].position.x += dPadSize;
+  arrows[1].rotation = Math.PI*1.5;
+  arrows[2].position.y += dPadSize;
+  arrows[2].rotation = 0;
+  arrows[3].position.y -= dPadSize;
+  arrows[3].rotation = Math.PI;
 
-      client.sendCmd('clicked', { down: true});
+
+  // TOUCH EVENT HANDLERS
+
+  // LEFT ARROW
+  arrows[0].mousedown = arrows[0].touchstart = function(data) {
+    this.setTexture(arrowDownTex);
+  }
+
+  arrows[0].mouseup = arrows[0].touchend = arrows[0].mouseupoutside = arrows[0].touchendoutside = 
+  arrows[0].mouseout = function(data) {
+    this.setTexture(arrowTex);
+    // client.sendCmd('unclicked', { down: true});
   };
 
-  bunny.mouseup = bunny.touchend = bunny.mouseupoutside = bunny.touchendoutside = function(data) {
+  // RIGHT ARROW
+  arrows[1].mousedown = arrows[1].touchstart = function(data) {
+    this.setTexture(arrowDownTex);
+  }
 
-    this.setTexture(bunnyTex);
-    client.sendCmd('unclicked', { down: true});
-  
+  arrows[1].mouseup = arrows[1].touchend = arrows[1].mouseupoutside = arrows[1].touchendoutside = 
+  arrows[1].mouseout = function(data) {
+    this.setTexture(arrowTex);
+    // client.sendCmd('unclicked', { down: true});
   };
 
-  // center the sprites anchor point
-  bunny.anchor.x = 0.5;
-  bunny.anchor.y = 0.5;
+  // DOWN ARROW
+  arrows[2].mousedown = arrows[2].touchstart = function(data) {
+    this.setTexture(arrowDownTex);
+  }
 
-  // move the sprite t the center of the screen
-  bunny.position.x = 200;
-  bunny.position.y = 150;
-  bunny.height = 100;
-  bunny.width = 100;
+  arrows[2].mouseup = arrows[2].touchend = arrows[2].mouseupoutside = arrows[2].touchendoutside = 
+  arrows[2].mouseout = function(data) {
+    this.setTexture(arrowTex);
+    // client.sendCmd('unclicked', { down: true});
+  };
 
-  stage.addChild(bunny);
+  // UP ARROW
+  arrows[3].mousedown = arrows[3].touchstart = function(data) {
+    this.setTexture(arrowDownTex);
+  }
 
+  arrows[3].mouseup = arrows[3].touchend = arrows[3].mouseupoutside = arrows[3].touchendoutside = 
+  arrows[3].mouseout = function(data) {
+    this.setTexture(arrowTex);
+    // client.sendCmd('unclicked', { down: true});
+  };
+
+  // BUTTON
+  button.mousedown = button.touchstart = function(data) {
+    this.setTexture(buttonDownTex);
+  }
+
+  button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = 
+  button.mouseout = function(data) {
+    this.setTexture(buttonTex);
+    // client.sendCmd('unclicked', { down: true});
+  };
 
   // create a renderer instance
   renderer.view.style.position = "absolute"
