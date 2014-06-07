@@ -1,3 +1,4 @@
+
 /HappyFunTimes/
 /public/games/wraslin/Unity/Library/
 /public/games/wraslin/Unity/Assets/Plugins/
@@ -32,5 +33,14 @@ temp
 *.psd
 *.ai
 *.sln
+
+
+
+*.sln
+
+
+public/games/wraslin/Unity/Unity-csharp.sln
+
+public/games/wraslin/Unity/Unity.sln
 
 

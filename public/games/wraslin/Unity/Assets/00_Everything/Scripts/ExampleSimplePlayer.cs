@@ -11,6 +11,8 @@ namespace HappyFunTimesExample {
 
 		public float moveSpeed = 5;
 
+		private Animator anim;
+
 
 	    // Classes based on MessageCmdData are automatically registered for deserialization
 	    // by CmdName.
@@ -89,6 +91,7 @@ namespace HappyFunTimesExample {
 	    }
 
 	    void Start() {
+			anim = GetComponent<Animator>();
 	        m_rand = new System.Random();
 	        m_position = gameObject.transform.localPosition;
 	        m_color = new Color(0.0f, 1.0f, 0.0f);
@@ -109,16 +112,35 @@ namespace HappyFunTimesExample {
 
 	    public void Update() {
 
-			GetComponent<TextMesh>().text = m_name;
-
+//			GetComponent<TextMesh>().text = m_name;
+			Debug.Log (anim.GetFloat("speed"));
 			if (moveLeft)
+			{
 				transform.position += new Vector3(-moveSpeed,0,0);
+//				GetComponent<Animator>().SetFloat("Speed", 1);
+				anim.SetFloat("speed",1);
+			}	
 			if (moveRight)
+			{
 				transform.position += new Vector3(moveSpeed,0,0);
+				anim.SetFloat("speed",1);
+			}
 			if (moveDown)
+			{
 				transform.position += new Vector3(0,-moveSpeed,0);
+				anim.SetFloat("speed",1);
+			}
 			if (moveUp)
+			{
 				transform.position += new Vector3(0,moveSpeed,0);
+				anim.SetFloat("speed",1);
+			}
+
+			// if not pressing on the dpad stand still
+			if (!moveLeft && !moveRight && !moveDown && !moveUp)
+			{
+				anim.SetFloat ("speed",0);
+			}
 
 	    }
 
@@ -169,6 +191,7 @@ namespace HappyFunTimesExample {
 		bool moveLeft = false;
 
 		private void OnMoveLeft(MessageMoveLeft data) {
+		
 			if (data.down)
 				moveLeft = true;
 			else
