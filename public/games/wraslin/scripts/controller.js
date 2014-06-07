@@ -113,56 +113,60 @@ var main = function(
   arrows[3].position.y -= dPadSize;
   arrows[3].rotation = Math.PI;
 
-
   // TOUCH EVENT HANDLERS
 
   // LEFT ARROW
   arrows[0].mousedown = arrows[0].touchstart = function(data) {
     this.setTexture(arrowDownTex);
+    client.sendCmd('moveLeft', { down: true});
   }
 
   arrows[0].mouseup = arrows[0].touchend = arrows[0].mouseupoutside = arrows[0].touchendoutside = 
   arrows[0].mouseout = function(data) {
     this.setTexture(arrowTex);
-    // client.sendCmd('unclicked', { down: true});
+    client.sendCmd('moveLeft', { down: false});
   };
 
   // RIGHT ARROW
   arrows[1].mousedown = arrows[1].touchstart = function(data) {
     this.setTexture(arrowDownTex);
+    client.sendCmd('moveRight', { down: true});
   }
 
   arrows[1].mouseup = arrows[1].touchend = arrows[1].mouseupoutside = arrows[1].touchendoutside = 
   arrows[1].mouseout = function(data) {
     this.setTexture(arrowTex);
-    // client.sendCmd('unclicked', { down: true});
+    client.sendCmd('moveRight', { down: false});
   };
 
   // DOWN ARROW
   arrows[2].mousedown = arrows[2].touchstart = function(data) {
     this.setTexture(arrowDownTex);
+    client.sendCmd('moveDown', { down: true});
   }
 
   arrows[2].mouseup = arrows[2].touchend = arrows[2].mouseupoutside = arrows[2].touchendoutside = 
   arrows[2].mouseout = function(data) {
     this.setTexture(arrowTex);
-    // client.sendCmd('unclicked', { down: true});
+    client.sendCmd('moveDown', { down: false});
   };
 
   // UP ARROW
   arrows[3].mousedown = arrows[3].touchstart = function(data) {
     this.setTexture(arrowDownTex);
+    client.sendCmd('moveUp', { down: true});
   }
 
   arrows[3].mouseup = arrows[3].touchend = arrows[3].mouseupoutside = arrows[3].touchendoutside = 
   arrows[3].mouseout = function(data) {
     this.setTexture(arrowTex);
-    // client.sendCmd('unclicked', { down: true});
+    client.sendCmd('moveUp', { down: false});
   };
 
   // BUTTON
   button.mousedown = button.touchstart = function(data) {
     this.setTexture(buttonDownTex);
+    state = "training";
   }
 
   button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = 
@@ -177,14 +181,29 @@ var main = function(
   renderer.view.style.height = window.innerHeight + "px";
   renderer.view.style.display = "block";
 
+  var state = "controller";
+
+  var trainingLoopLimit = 0;
+
+
   function animate() {
-      // just for fun, let's rotate mr rabbit a little
-      // bunny.rotation += 0.01;
+    // just for fun, let's rotate mr rabbit a little
+    // bunny.rotation += 0.01;
 
-      // render the stage
-      renderer.render(stage);
+    // render the stage
+    renderer.render(stage);
 
-      requestAnimFrame(animate);
+    requestAnimFrame(animate);
+
+    if (state == "training" & trainingLoopLimit == 0)
+    {
+      stage.removeChild(button);
+      for (var i=0;i<4;i++) {
+        stage.removeChild(arrows[i]);
+      }
+      trainingLoopLimit = 1;
+    }
+
   }
 
     ///////////////// PIXI END /////////////////////

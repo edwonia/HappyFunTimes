@@ -1,0 +1,21 @@
+<!DOCTYPE PencilDocument>
+<document>
+  <editor>
+    <currentLayer value="2"/>
+    <currentFrame value="1"/>
+    <currentFps value="12"/>
+    <currentView dx="0" dy="0" m21="0" m11="1" m22="1" m12="0"/>
+  </editor>
+  <object>
+    <layer width="640" visibility="1" height="480" type="5" name="Camera Layer">
+      <camera dx="0" dy="0" m21="0" m11="1" m22="1" m12="0" frame="1"/>
+    </layer>
+    <layer visibility="1" type="2" id="2" name="Vector Layer">
+      <image frame="1" src="002.001.vec"/>
+    </layer>
+    <layer visibility="1" type="1" id="3" name="Bitmap Layer">
+      <image topLeftX="-223" topLeftY="-272" frame="1" src="003.001.png"/>
+      <image topLeftX="0" topLeftY="0" frame="2" src="003.002.png"/>
+    </layer>
+  </object>
+</document>
