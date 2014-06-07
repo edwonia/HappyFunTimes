@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/00_Everything/Scripts/ExampleSimple.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/00_Everything/Scripts/ExampleSimplePlayer.cs">
     <Files>
-      <File FileName="Assets/00_Everything/Scripts/ExampleSimplePlayer.cs" Line="115" Column="40" />
-      <File FileName="Assets/00_Everything/Scripts/ExampleSimple.cs" Line="7" Column="1" />
+      <File FileName="Assets/00_Everything/Scripts/ExampleSimplePlayer.cs" Line="86" Column="16" />
+      <File FileName="Assets/00_Everything/Scripts/ExampleSimple.cs" Line="10" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

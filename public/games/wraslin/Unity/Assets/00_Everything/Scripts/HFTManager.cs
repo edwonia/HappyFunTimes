@@ -7,7 +7,7 @@ using CSSParse;
 
 namespace HappyFunTimesExample {
 
-public class ExampleSimple : MonoBehaviour {
+public class HFTManager : MonoBehaviour {
 
     public GameObject prefabToSpawnForPlayer;
 
@@ -33,7 +33,7 @@ public class ExampleSimple : MonoBehaviour {
         GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer, position, Quaternion.identity);
         // Add the ExampleSimplePlayer script to this object. Note: We could possible add this to the prefab.
         // Not sure which is best.
-        ExampleSimplePlayer player = gameObject.AddComponent<ExampleSimplePlayer>();
+        HFTPlayer player = gameObject.AddComponent<HFTPlayer>();
         player.Init(e.netPlayer);
     }
 

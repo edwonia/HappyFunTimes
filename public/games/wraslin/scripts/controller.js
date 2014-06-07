@@ -45,6 +45,9 @@ var main = function(
   };
 
   var dPadSize = 75;
+  var m_strength = 1; 
+  var m_startHeight = 75;
+  var m_startWidth = 25;
 
   Misc.applyUrlSettings(globals);
   MobileHacks.fixHeightHack();
@@ -63,7 +66,7 @@ var main = function(
   stage.interactive = true;
 
   // create a renderer instance
-  var renderer = PIXI.autoDetectRenderer(400, 300);
+  var renderer = PIXI.autoDetectRenderer(400, 300, false);
 
   // add the renderer view element to the DOM
   document.getElementById("controller").appendChild(renderer.view);
@@ -74,6 +77,32 @@ var main = function(
   var arrowDownTex = PIXI.Texture.fromImage("assets/arrow-down.png");
   var buttonTex = PIXI.Texture.fromImage("assets/circle.png");
   var buttonDownTex = PIXI.Texture.fromImage("assets/circle-down.png");
+
+  // fight button
+  var fightButtonTex = PIXI.Texture.fromImage("assets/fight-button.png");
+  var fightButton = new PIXI.Sprite(fightButtonTex);
+  fightButton.buttonMode = true;
+  fightButton.interactive = true;
+  fightButton.isSelected = false;
+  fightButton.anchor.x = 0.5;
+  fightButton.anchor.y = 0.5;
+  fightButton.position.x = 50;
+  fightButton.position.y = 50; 
+  fightButton.height = 75;
+  fightButton.width = 75;
+
+  // training game images
+  var wrestlerTex = PIXI.Texture.fromImage("assets/wrestler.png");
+  var wrestler = new PIXI.Sprite(wrestlerTex);
+  wrestler.buttonMode = true;
+  wrestler.interactive = true;
+  wrestler.isSelected = false;
+  wrestler.anchor.x = 0.5;
+  wrestler.anchor.y = 0.5;
+  wrestler.position.x = 200;
+  wrestler.position.y = 150;
+  wrestler.height = (m_strength * m_startHeight);
+  wrestler.width = (m_strength * m_startWidth);
 
   // create a new Sprite using the texture
   var arrows = new Array();
@@ -112,6 +141,15 @@ var main = function(
   arrows[2].rotation = 0;
   arrows[3].position.y -= dPadSize;
   arrows[3].rotation = Math.PI;
+
+  // SENDCMD EVENT HANDLERS
+
+  var youDied = function(data) {
+    state = "training";
+  }
+
+  client.addEventListener('die', youDied);
+
 
   // TOUCH EVENT HANDLERS
 
@@ -166,14 +204,29 @@ var main = function(
   // BUTTON
   button.mousedown = button.touchstart = function(data) {
     this.setTexture(buttonDownTex);
-    state = "training";
+    // state = "training";
+    client.sendCmd('flying', { down: true});
   }
 
   button.mouseup = button.touchend = button.mouseupoutside = button.touchendoutside = 
   button.mouseout = function(data) {
     this.setTexture(buttonTex);
-    // client.sendCmd('unclicked', { down: true});
+    client.sendCmd('flying', { down: false});
   };
+
+  // WRESTLER
+  wrestler.mousedown = wrestler.touchstart = function(data) {
+    m_strength += .1;
+    client.sendCmd('strength', { strength: m_strength});
+  }
+
+  // FIGHT BUTTON
+  fightButton.mousedown = fightButton.touchstart = function(data) {
+    controllerLoopLimit = 0;
+    state = "controller";
+
+    client.sendCmd('fight', {down: true})
+  }
 
   // create a renderer instance
   renderer.view.style.position = "absolute"
@@ -184,6 +237,7 @@ var main = function(
   var state = "controller";
 
   var trainingLoopLimit = 0;
+  var controllerLoopLimit = 1;
 
 
   function animate() {
@@ -195,13 +249,36 @@ var main = function(
 
     requestAnimFrame(animate);
 
+
     if (state == "training" & trainingLoopLimit == 0)
     {
+      // turn off the controller
       stage.removeChild(button);
       for (var i=0;i<4;i++) {
         stage.removeChild(arrows[i]);
       }
+      // turn on the training game
+      stage.addChild(wrestler);
+      stage.addChild(fightButton);
+
       trainingLoopLimit = 1;
+    }
+
+    if (state == "training")
+    {
+      wrestler.width = (m_strength * m_startWidth);
+      wrestler.height = (m_strength * m_startHeight);
+    }
+
+    if (state == "controller" & controllerLoopLimit == 0)
+    {
+      stage.removeChild(wrestler);
+      stage.removeChild(fightButton);
+      stage.addChild(button)
+      for (var i=0;i<4;i++) {
+        stage.addChild(arrows[i]);
+      }
+      controllerLoopLimit = 1;
     }
 
   }
