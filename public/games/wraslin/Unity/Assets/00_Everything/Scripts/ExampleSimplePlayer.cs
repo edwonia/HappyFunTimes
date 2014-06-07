@@ -9,7 +9,7 @@ namespace HappyFunTimesExample {
 
 	class ExampleSimplePlayer : MonoBehaviour {
 
-		public float moveSpeed = 5;
+		public float moveSpeed = 2;
 
 		private Animator anim;
 
@@ -113,7 +113,6 @@ namespace HappyFunTimesExample {
 	    public void Update() {
 
 //			GetComponent<TextMesh>().text = m_name;
-			Debug.Log (anim.GetFloat("speed"));
 			if (moveLeft)
 			{
 				transform.position += new Vector3(-moveSpeed,0,0);
@@ -196,6 +195,9 @@ namespace HappyFunTimesExample {
 				moveLeft = true;
 			else
 				moveLeft = false;
+
+			if (transform.localScale.x > 0)
+				Flip ();
 		}
 
 		bool moveRight = false;
@@ -205,6 +207,9 @@ namespace HappyFunTimesExample {
 				moveRight = true;
 			else
 				moveRight = false;
+
+			if (transform.localScale.x < 0)
+				Flip ();
 		}
 
 		bool moveDown = false;
@@ -224,6 +229,12 @@ namespace HappyFunTimesExample {
 			else
 				moveUp = false;
 		}
+
+		private void Flip ()
+		{
+			transform.localScale = new Vector3(-transform.localScale.x,transform.localScale.y,transform.localScale.z);
+		}
+
 	    private System.Random m_rand;
 	    private NetPlayer m_netPlayer;
 	    private Vector3 m_position;
