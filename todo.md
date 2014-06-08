@@ -1,3 +1,6 @@
+*   file bug with apple about canvas/photos
+*   make games.html msgs show up even when scrolled down
+*   fix docs
 *   fix localhost replacement so it includes port
 *   add timeout for input. No input from player for n seconds = disconnect?
 
@@ -365,16 +368,6 @@
     his laptop or tablet and hack some custom code just to be an ahole is not so likely?
 
 *   Have better splash if no games running
-*   make gameviews template based so we can make disconnect behavior common
-
-    - [x] boomboom
-    - [x] clocksync
-    - [ ] deviceorientation
-    - [x] jamjam
-    - [x] jumpjump
-    - [x] powpow
-    - [x] shootshoot
-    - [ ] simple
 
 *   stop sliding fingers from selecting stuff.
 *   make bird quack if you click him (consider random speed)
@@ -522,6 +515,20 @@
 Done
 ----
 
+*   make gameviews template based so we can make disconnect behavior common
+
+    - [x] boomboom
+    - [x] clocksync
+    - [x] deviceorientation
+    - [x] jamjam
+    - [x] jumpjump
+    - [x] powpow
+    - [x] shootshoot
+    - [x] simple
+
+*   move common stuff lower
+*   move 3rdparty stuff lower
+*   move wrench lower
 *   move package.json stuff to happyfuntimes sub
 *   Make start on game-login use whole area.
 *   Change Powpow so outline version of ship is 2x or 3x thicker

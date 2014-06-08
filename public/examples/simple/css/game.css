@@ -29,62 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-"use strict";
-
-var main = function(IO, Strings) {
-
-  var $ = function(id) {
-    return document.getElementById(id);
-  };
-
-  var gamemenu = $("gamemenu");
-  var nogames  = $("nogames");
-  var template = $("item-template").text;
-  var oldHtml = "";
-
-  var getGames = function() {
-    IO.sendJSON(window.location.href, {cmd: 'listRunningGames'}, function (obj, exception) {
-      if (exception) {
-        setTimeout(getGames, 1000);
-        return;
-      }
-
-      var items = [];
-      for (var ii = 0; ii < obj.length; ++ii) {
-        var game = obj[ii];
-
-        // Not sure how I should figure out the name and screenshot.
-        var basePath = game.controllerUrl.substring(0, game.controllerUrl.lastIndexOf('/') + 1);
-        game.name = game.name || game.gameId;
-        game.screenshotUrl = game.screenshotUrl || (basePath + game.gameId + "-screenshot.png");
-        items.push(Strings.replaceParams(template, game));
-      }
-      var html = items.join("");
-      if (html != oldHtml) {
-        oldHtml = html;
-        gamemenu.innerHTML = html;
-      }
-
-      nogames.style.display = items.length ? "none" : "block";
-
-      // If there's only one game just go to it.
-      if (obj.length == 1 && obj[0].controllerUrl) {
-        window.location.href = obj[0].controllerUrl;
-        return;
-      }
-
-      setTimeout(getGames, 5000);
-    });
-  };
-  getGames();
-};
-
-// Start the main app logic.
-requirejs(
-  [ 'scripts/io',
-    'scripts/misc/strings',
-  ],
-  main
-);
-
+#status {
+  height 10%;
+}
+#playfield {
+  width: 100%;
+  height 90%;
+}
 

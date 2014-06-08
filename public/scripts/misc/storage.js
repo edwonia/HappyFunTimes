@@ -28,63 +28,49 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 "use strict";
 
-var main = function(IO, Strings) {
+define(function() {
+  // Check if storage even works.
+  var itWorks = false;
+  if (window.localStorage) {
+    try {
+      window.localStorage.setItem("foobardummyburp", "blargs");
+      window.localStraoge.removeItem("foobardummyburp");
+      itWorks = true;
+    } catch (e) {
+    }
+  }
 
-  var $ = function(id) {
-    return document.getElementById(id);
+  var noop = function() { };
+
+  // This is an object, that way you set the name just once so calling set or get you
+  // don't have to worry about getting the name wrong.
+  //
+  //     var fooStorage = new Storage("foo");
+  //     var value = fooStorage.get();
+  //     fooStorage.set(newValue);
+  //     fooStorage.erase();
+  var Storage = itWorks ? function(name, opt_path) {
+
+    this.set = function(value, opt_days) {
+      window.localStorage.setItem(name, value);
+    };
+
+    this.get = function() {
+      return window.localStorage.getItem(name);
+    };
+
+    this.erase = function() {
+      window.localStorage.removeItem(name);
+    };
+  } : function() {
+    this.set = noop;
+    this.get = noop;
+    this.erase = noop;
   };
 
-  var gamemenu = $("gamemenu");
-  var nogames  = $("nogames");
-  var template = $("item-template").text;
-  var oldHtml = "";
-
-  var getGames = function() {
-    IO.sendJSON(window.location.href, {cmd: 'listRunningGames'}, function (obj, exception) {
-      if (exception) {
-        setTimeout(getGames, 1000);
-        return;
-      }
-
-      var items = [];
-      for (var ii = 0; ii < obj.length; ++ii) {
-        var game = obj[ii];
-
-        // Not sure how I should figure out the name and screenshot.
-        var basePath = game.controllerUrl.substring(0, game.controllerUrl.lastIndexOf('/') + 1);
-        game.name = game.name || game.gameId;
-        game.screenshotUrl = game.screenshotUrl || (basePath + game.gameId + "-screenshot.png");
-        items.push(Strings.replaceParams(template, game));
-      }
-      var html = items.join("");
-      if (html != oldHtml) {
-        oldHtml = html;
-        gamemenu.innerHTML = html;
-      }
-
-      nogames.style.display = items.length ? "none" : "block";
-
-      // If there's only one game just go to it.
-      if (obj.length == 1 && obj[0].controllerUrl) {
-        window.location.href = obj[0].controllerUrl;
-        return;
-      }
-
-      setTimeout(getGames, 5000);
-    });
-  };
-  getGames();
-};
-
-// Start the main app logic.
-requirejs(
-  [ 'scripts/io',
-    'scripts/misc/strings',
-  ],
-  main
-);
+  return Storage;
+});
 
 

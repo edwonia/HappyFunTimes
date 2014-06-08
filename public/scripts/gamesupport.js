@@ -31,17 +31,17 @@
 "use strict";
 
 define([
-    './3rdparty/stats/stats.min',
-    './gameclock',
+    '../3rdparty/stats/stats.min',
+    './misc/gameclock',
+    './misc/logger',
+    './misc/misc',
     './hft-splash',
-    './logger',
-    './misc',
   ], function(
     StatsJS,
     GameClock,
-    HFTSplash,
     Logger,
-    Misc) {
+    Misc,
+    HFTSplash) {
 
   var $ = function(id) {
     return document.getElementById(id);
@@ -166,7 +166,7 @@ define([
     // battery. So, if I'm running locally I make
     // the game pause on blur which means effectively
     // it will stop anytime I switch back to my editor.
-    if ((!globals.haveServer && globals.pauseOnBlur !== false) || globals.pauseOnBlur) {
+    if ((globals.haveServer === false && globals.pauseOnBlur !== false) || globals.pauseOnBlur) {
       window.addEventListener('blur', stop, false);
       window.addEventListener('focus', start, false);
       window.addEventListener('resize', updateOnce, false);

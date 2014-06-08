@@ -31,10 +31,10 @@
 "use strict";
 
 define([
-    '../../scripts/io',
+    './io',
     './hft-splash',
-    './misc',
-    './playername',
+    './misc/misc',
+    './misc/playername',
   ], function(
     IO,
     HFTSplash,
@@ -57,9 +57,7 @@ define([
     }, false);
     $("hft-setname").addEventListener('click', function() {
       settings.style.display = "none";
-  console.log("--h1");
       playerNameHandler.startNameEntry();
-  console.log("--h2");
     }, false);
     $("hft-restart").addEventListener('click', function() {
       window.location.reload();
