@@ -292,11 +292,11 @@ var main = function(
 requirejs(
   [ './bin/pixi.dev.js',
     '../../../scripts/gameclient',
-    '../../../examples/scripts/3rdparty/handjs/hand-1.3.7',
-    '../../../examples/scripts/exampleui',
-    '../../../examples/scripts/input',
-    '../../../examples/scripts/misc',
-    '../../../examples/scripts/mobilehacks',
+    '../../../3rdparty/handjs/hand-1.3.7',
+    '../../../scripts/commonui',
+    '../../../scripts/misc/input',
+    '../../../scripts/misc/misc',
+    '../../../scripts/misc/mobilehacks',
   ],
   main
 );
