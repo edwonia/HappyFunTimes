@@ -84,6 +84,8 @@ GameObject:
   - 4: {fileID: 676521970}
   - 114: {fileID: 676521969}
   - 114: {fileID: 676521971}
+  - 114: {fileID: 676521973}
+  - 114: {fileID: 676521972}
   m_Layer: 0
   m_Name: HFTManager
   m_TagString: Untagged
@@ -102,8 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f36ef8b9ce5439b9dbe7bf682d51d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabToSpawnForPlayer: {fileID: 100000, guid: b000cc5a0e2494008b02a815a3c9dd03,
-    type: 2}
 --- !u!4 &676521970
 Transform:
   m_ObjectHideFlags: 0
@@ -115,6 +115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!114 &676521971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,8 +127,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 513543f085d1e4e52ae0a0d948383c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &676521972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 676521968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf2a409a8156240d1a7567625a2750a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   areaWidth: 300
   areaHeight: 300
+--- !u!114 &676521973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 676521968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc33ec99a7a5b40e68a00dbbc966dacb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToSpawnForPlayer: {fileID: 100000, guid: b5bb5971a1831415894c3b09957fb229,
+    type: 2}
 --- !u!1 &1364759841
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,8 +220,11 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
   m_HDR: 0
   m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!4 &1364759846
 Transform:
   m_ObjectHideFlags: 0
@@ -208,3 +236,4 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 1
