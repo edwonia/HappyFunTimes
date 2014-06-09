@@ -125,7 +125,7 @@ There's a Unity3D library if you'd like to make the game in Unity3D.
            console.log("You scored " + data.points + " points!");
         };
 
-        gameclient.addEventHandler('scored', someFunctionToHandleScoring);
+        gameclient.addEventListener('scored', someFunctionToHandleScoring);
 
     A simple client might look like this
 
@@ -397,9 +397,11 @@ Folder structure
     | |
     | +-scripts  // The HappyFunTime JavaScript Library
     | |
+    | +-3rdparty  // Various 3rdparty JavaScript libs
+    | |
     | +-examples  // the examples
     |   |
-    |   +-scripts  // libraries shared by the examples, not part of HappyFunTimes
+    |   +-scripts  // libraries shared by some of the examples, not part of HappyFunTimes
     |   |
     |   +-<example> // each example
     |     |
