@@ -15,6 +15,7 @@ namespace HappyFunTimesExample {
 		public float flyingTime = 1;
 		public float flyingSpeed = 1;
 		public float m_strength = 1;
+		public float strengthDivisor = 10;
 		public float m_initialScale = 210;
 
 		private Animator anim;
@@ -290,7 +291,7 @@ namespace HappyFunTimesExample {
 		IEnumerator FightSequence ()
 		{
 			stateGame = "transferring";
-			transform.localScale = new Vector3 (m_strength * m_initialScale, m_strength * m_initialScale);
+			transform.localScale = new Vector3 ((m_strength/strengthDivisor) * m_initialScale, (m_strength/strengthDivisor) * m_initialScale);
 			anim.SetBool("transferDown", true);
 			yield return new WaitForSeconds(1.75f);
 			stateGame = "fighting";
@@ -315,11 +316,20 @@ namespace HappyFunTimesExample {
 
 		}
 
-		void OnCollisionEnter2D(Collision2D coll)
+//		void OnCollisionEnter2D(Collision2D coll)
+//		{
+//			if (flying && coll.collider.tag == "Player")
+//			{
+////				Debug.Log ("Die Message Sent by " + m_name);
+//				coll.gameObject.SendMessage("Die");
+//			}
+//		}
+
+		void OnCollisionStay2D(Collision2D coll)
 		{
 			if (flying && coll.collider.tag == "Player")
 			{
-//				Debug.Log ("Die Message Sent by " + m_name);
+				//				Debug.Log ("Die Message Sent by " + m_name);
 				coll.gameObject.SendMessage("Die");
 			}
 		}

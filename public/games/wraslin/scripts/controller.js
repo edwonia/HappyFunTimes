@@ -38,16 +38,20 @@ var main = function(
     ExampleUI,
     Input,
     Misc,
-    MobileHacks) {
+    MobileHacks)
+     {
 
   var globals = {
     debug: false,
   };
 
+  window.g = globals; 
+
   var dPadSize = 75;
   var m_strength = 1; 
   var m_startHeight = 75;
   var m_startWidth = 25;
+  var legsInitialPosX = 75;
 
   Misc.applyUrlSettings(globals);
   MobileHacks.fixHeightHack();
@@ -91,18 +95,54 @@ var main = function(
   fightButton.height = 75;
   fightButton.width = 75;
 
-  // training game images
-  var wrestlerTex = PIXI.Texture.fromImage("assets/wrestler.png");
-  var wrestler = new PIXI.Sprite(wrestlerTex);
-  wrestler.buttonMode = true;
-  wrestler.interactive = true;
-  wrestler.isSelected = false;
-  wrestler.anchor.x = 0.5;
-  wrestler.anchor.y = 0.5;
-  wrestler.position.x = 200;
-  wrestler.position.y = 150;
-  wrestler.height = (m_strength * m_startHeight);
-  wrestler.width = (m_strength * m_startWidth);
+  // TRAINING GAME IMAGES
+  var nothingTex = PIXI.Texture.fromImage("assets/nothing.png");
+  var nothing = new PIXI.Sprite(nothingTex);
+  globals.nothing = nothing;
+  nothing.position.x = 0;
+  nothing.position.y = 0;
+  nothing.buttonMode = true;
+  nothing.interactive = true;
+  nothing.isSelected = false;
+  nothing.anchor.x = 0.5;
+  nothing.anchor.y = 0.5;
+  nothing.position.x = 200;
+  nothing.position.y = 150; 
+  nothing.height = 300;
+  nothing.width = 400;
+  var upperBodyTex = PIXI.Texture.fromImage("assets/wrestlerTrainingAnim/upper-body.png");
+  var upperBody = new PIXI.Sprite(upperBodyTex);
+  globals.upperBody = upperBody;
+  upperBody.position.x = 10;
+  upperBody.position.y = 200;
+  var armsDownTex = PIXI.Texture.fromImage("assets/wrestlerTrainingAnim/arms-down.png");
+  var armsDown = new PIXI.Sprite(armsDownTex);
+  globals.armsDown = armsDown;
+  armsDown.position.x = 54;
+  armsDown.position.y = 175;
+  var legsTex = PIXI.Texture.fromImage("assets/wrestlerTrainingAnim/legs.png");
+  var legs = new PIXI.Sprite(legsTex);
+  globals.legs = legs;
+  legs.position.x = legsInitialPosX;
+  legs.position.y = 212;
+  var armsUpTex = PIXI.Texture.fromImage("assets/wrestlerTrainingAnim/arms-up.png");
+  var armsUp = new PIXI.Sprite(armsUpTex);
+  globals.armsUp = armsUp;
+  armsUp.position.x = 54;
+  armsUp.position.y = 35;
+  armsUp.alpha = 0;
+  var stretchTex = PIXI.Texture.fromImage("assets/wrestlerTrainingAnim/stretch.png");
+  var stretch = new PIXI.Sprite(stretchTex);
+  globals.stretch = stretch;
+  stretch.position.x = 150;
+  stretch.position.y = 212;
+  var bossTex = PIXI.Texture.fromImage("assets/boss.png");
+  var boss = new PIXI.Sprite(bossTex);
+  globals.boss = boss;
+  boss.position.x = 300;
+  boss.position.y = 10;
+  //TRAINING TEXT
+  var strengthText = new PIXI.Text(m_strength.toString(), {font: "25px Arial", fill:"black"});
 
   // create a new Sprite using the texture
   var arrows = new Array();
@@ -216,20 +256,35 @@ var main = function(
     client.sendCmd('flying', { down: false});
   };
 
-  // WRESTLER
-  wrestler.mousedown = wrestler.touchstart = function(data) {
-    m_strength += .1;
-    client.sendCmd('strength', { strength: m_strength});
-  }
-
   // FIGHT BUTTON
   fightButton.mousedown = fightButton.touchstart = function(data) {
     controllerLoopLimit = 0;
-    stateController = "controller";
     client.sendCmd('stateControllerChange', {stateController: "controller"});
-
+    client.sendCmd('strength', {strength: m_strength});
     client.sendCmd('fight', {down: true})
+    stateController = "controller";
   }
+
+  // FULL SCREEN TRAINING BUTTON (NOTHING)
+  var armsDownTest = true;
+  nothing.mousedown = nothing.touchstart = function(data) {
+    if (armsDownTest) {
+      m_strength += 1;
+      console.log("armsUp");
+      armsUp.alpha = 1;
+      armsDown.alpha = 0;
+      armsDownTest = false;
+    }
+    else {
+      console.log("armsDown");
+      armsUp.alpha = 0;
+      armsDown.alpha = 1;
+      armsDownTest = true;
+    }
+
+  }
+
+
 
   // create a renderer instance
   renderer.view.style.position = "absolute"
@@ -253,31 +308,50 @@ var main = function(
 
     requestAnimFrame(animate);
 
+    strengthText.setText(m_strength);
 
     if (stateController == "training" & trainingLoopLimit == 0)
     {
+
       // turn off the controller
       stage.removeChild(button);
       for (var i=0;i<4;i++) {
         stage.removeChild(arrows[i]);
       }
       // turn on the training game
-      stage.addChild(wrestler);
+      stage.addChild(strengthText);
+      stage.addChild(legs);
+      stage.addChild(upperBody);
+      stage.addChild(armsDown);
+      stage.addChild(armsUp);
+      stage.addChild(stretch);
+      stage.addChild(boss);
+      // the fullscreen button on top of everything else
+      stage.addChild(nothing);
+      // except the fight button
       stage.addChild(fightButton);
+
 
       trainingLoopLimit = 1;
     }
 
     if (stateController == "training")
     {
-      wrestler.width = (m_strength * m_startWidth);
-      wrestler.height = (m_strength * m_startHeight);
+      legs.position.x = m_strength + legsInitialPosX;
     }
 
     if (stateController == "controller" & controllerLoopLimit == 0)
     {
-      stage.removeChild(wrestler);
+      stage.removeChild(strengthText);
       stage.removeChild(fightButton);
+      stage.removeChild(legs);
+      stage.removeChild(upperBody);
+      stage.removeChild(armsDown);
+      stage.removeChild(armsUp);
+      stage.removeChild(stretch);
+      stage.removeChild(boss);
+      stage.removeChild(nothing);
+
       stage.addChild(button)
       for (var i=0;i<4;i++) {
         stage.addChild(arrows[i]);
