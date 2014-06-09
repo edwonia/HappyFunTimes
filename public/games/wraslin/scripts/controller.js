@@ -147,7 +147,8 @@ var main = function(
   var youDied = function(data) {
     // javascript: console.log("died ");
     trainingLoopLimit = 0;
-    state = "training";
+    stateController = "training";
+    client.sendCmd('stateControllerChange', {stateController: "training"});
   }
 
   client.addEventListener('die', youDied);
@@ -206,7 +207,6 @@ var main = function(
   // BUTTON
   button.mousedown = button.touchstart = function(data) {
     this.setTexture(buttonDownTex);
-    // state = "training";
     client.sendCmd('flying', { down: true});
   }
 
@@ -225,7 +225,8 @@ var main = function(
   // FIGHT BUTTON
   fightButton.mousedown = fightButton.touchstart = function(data) {
     controllerLoopLimit = 0;
-    state = "controller";
+    stateController = "controller";
+    client.sendCmd('stateControllerChange', {stateController: "controller"});
 
     client.sendCmd('fight', {down: true})
   }
@@ -236,7 +237,8 @@ var main = function(
   renderer.view.style.height = window.innerHeight + "px";
   renderer.view.style.display = "block";
 
-  var state = "controller";
+  var stateController = "controller";
+  client.sendCmd('stateControllerChange', {stateController: "controller"});
 
   var trainingLoopLimit = 0;
   var controllerLoopLimit = 1;
@@ -252,7 +254,7 @@ var main = function(
     requestAnimFrame(animate);
 
 
-    if (state == "training" & trainingLoopLimit == 0)
+    if (stateController == "training" & trainingLoopLimit == 0)
     {
       // turn off the controller
       stage.removeChild(button);
@@ -266,13 +268,13 @@ var main = function(
       trainingLoopLimit = 1;
     }
 
-    if (state == "training")
+    if (stateController == "training")
     {
       wrestler.width = (m_strength * m_startWidth);
       wrestler.height = (m_strength * m_startHeight);
     }
 
-    if (state == "controller" & controllerLoopLimit == 0)
+    if (stateController == "controller" & controllerLoopLimit == 0)
     {
       stage.removeChild(wrestler);
       stage.removeChild(fightButton);

@@ -9,9 +9,11 @@ namespace HappyFunTimesExample {
 
 	class HFTPlayer : MonoBehaviour {
 
-		public float moveSpeed = 2;
+		public string stateGame = "fighting"; // the state of the player in Unity
+		public string stateController = "controller"; // the state of the controller
+		public float moveSpeed = 250;
 		public float flyingTime = 1;
-		public float flyingSpeed = 2;
+		public float flyingSpeed = 1;
 		public float m_strength = 1;
 		public float m_initialScale = 210;
 
@@ -74,6 +76,11 @@ namespace HappyFunTimesExample {
 		private class MessageFight : MessageCmdData {
 			public bool down = true;
 		};
+
+		[CmdName("stateControllerChange")]
+		private class MessageStateControllerChange : MessageCmdData {
+			public string stateController = "controller";
+		};
 		
 		// NOTE: This message is only sent, never received
 	    // therefore it does not need a no parameter constructor.
@@ -118,51 +125,64 @@ namespace HappyFunTimesExample {
 			m_netPlayer.RegisterCmdHandler<MessageFlying>(OnFlying);
 			m_netPlayer.RegisterCmdHandler<MessageStrength>(OnStrength);
 			m_netPlayer.RegisterCmdHandler<MessageFight>(OnFight);
+			m_netPlayer.RegisterCmdHandler<MessageStateControllerChange>(OnStateControllerChange);
 
 	    }
+
+		private string stateGamePrevious = "dipe";
 
 	    public void Update() {
 
 			text.text = m_name;
 
-			if (moveLeft)
-			{
-				transform.position += new Vector3(-moveSpeed,0,0);
-//				GetComponent<Animator>().SetFloat("Speed", 1);
-				anim.SetFloat("speed",1);
-			}	
-			if (moveRight)
-			{
-				transform.position += new Vector3(moveSpeed,0,0);
-				anim.SetFloat("speed",1);
-			}
-			if (moveDown)
-			{
-				transform.position += new Vector3(0,-moveSpeed,0);
-				anim.SetFloat("speed",1);
-			}
-			if (moveUp)
-			{
-				transform.position += new Vector3(0,moveSpeed,0);
-				anim.SetFloat("speed",1);
-			}
+			if(stateGame != stateGamePrevious)
+				Debug.Log (stateGame);
+			stateGamePrevious = stateGame;
 
-			// if not pressing on the dpad stand still
-			if (!moveLeft && !moveRight && !moveDown && !moveUp)
+			if (stateGame != "transferring")
 			{
-				anim.SetFloat ("speed",0);
-			}
-
-			if (flying)
-			{
-				if (transform.localScale.x > 0)
+				if (moveLeft)
 				{
-					transform.position += new Vector3(flyingSpeed,0,0);
-				} else {
-					transform.position -= new Vector3(flyingSpeed,0,0);
+	//				transform.position += new Vector3(-moveSpeed,0,0);
+					rigidbody2D.velocity += new Vector2(-moveSpeed,0);
+	//				GetComponent<Animator>().SetFloat("Speed", 1);
+					anim.SetFloat("speed",1);
+				}	
+				if (moveRight)
+				{
+	//				transform.position += new Vector3(moveSpeed,0,0);
+					rigidbody2D.velocity += new Vector2(moveSpeed,0);
+					anim.SetFloat("speed",1);
+				}
+				if (moveDown)
+				{
+	//				transform.position += new Vector3(0,-moveSpeed,0);
+					rigidbody2D.velocity += new Vector2(0,-moveSpeed);
+					anim.SetFloat("speed",1);
+				}
+				if (moveUp)
+				{
+	//				transform.position += new Vector3(0,moveSpeed,0);
+					rigidbody2D.velocity += new Vector2(0,moveSpeed);
+					anim.SetFloat("speed",1);
+				}
+
+				// if not pressing on the dpad stand still
+				if (!moveLeft && !moveRight && !moveDown && !moveUp)
+				{
+					anim.SetFloat ("speed",0);
+				}
+
+				if (flying)
+				{
+					if (transform.localScale.x > 0)
+					{
+						rigidbody2D.velocity += new Vector2(moveSpeed,0);
+					} else {
+						rigidbody2D.velocity += new Vector2(-moveSpeed,0);
+					}
 				}
 			}
-
 
 			
 		}
@@ -260,11 +280,22 @@ namespace HappyFunTimesExample {
 
 		}
 
+		private void OnStateControllerChange (MessageStateControllerChange data)
+		{
+			stateController = data.stateController;
+//			Debug.Log (stateController);
+
+		}
+
 		IEnumerator FightSequence ()
 		{
+			stateGame = "transferring";
 			transform.localScale = new Vector3 (m_strength * m_initialScale, m_strength * m_initialScale);
 			anim.SetBool("transferDown", true);
-			yield return new WaitForSeconds(.0001f);
+			yield return new WaitForSeconds(1.75f);
+			stateGame = "fighting";
+			collider2D.enabled = true;
+			anim.SetBool ("transferDown", false);
 		}
 
 		IEnumerator Fly()
@@ -286,7 +317,7 @@ namespace HappyFunTimesExample {
 
 		void OnCollisionEnter2D(Collision2D coll)
 		{
-			if (flying)
+			if (flying && coll.collider.tag == "Player")
 			{
 //				Debug.Log ("Die Message Sent by " + m_name);
 				coll.gameObject.SendMessage("Die");
@@ -302,9 +333,12 @@ namespace HappyFunTimesExample {
 		IEnumerator DieSequence()
 		{
 //			Debug.Log ("Die Message Received by " + m_name);
+			stateGame = "transferring";
 			anim.SetBool("transferUp", true);
+			collider2D.enabled = false;
 //			iTween.MoveAdd(gameObject,new Vector3(0,10,0), 2);
 			yield return new WaitForSeconds(1.75f);
+			stateGame = "training";
 			m_netPlayer.SendCmd(new MessageDie());
 			gameObject.SetActive(false);
 //			Destroy (gameObject);
