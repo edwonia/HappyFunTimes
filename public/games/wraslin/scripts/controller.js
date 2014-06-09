@@ -145,6 +145,8 @@ var main = function(
   // SENDCMD EVENT HANDLERS
 
   var youDied = function(data) {
+    // javascript: console.log("died ");
+    trainingLoopLimit = 0;
     state = "training";
   }
 

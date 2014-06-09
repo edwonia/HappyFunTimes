@@ -162,7 +162,10 @@ namespace HappyFunTimesExample {
 					transform.position -= new Vector3(flyingSpeed,0,0);
 				}
 			}
-	    }
+
+
+			
+		}
 
 	    public void OnTriggerEnter(Collider other) {
 	        // Because of physics layers we can only collide with the goal
@@ -252,10 +255,16 @@ namespace HappyFunTimesExample {
 		{
 			data.down = true;
 			// make sure size is always relative to strength variable
-			transform.localScale = new Vector3 (m_strength * m_initialScale, m_strength * m_initialScale);
-
 			gameObject.SetActive(true);
+			StartCoroutine(FightSequence());
 
+		}
+
+		IEnumerator FightSequence ()
+		{
+			transform.localScale = new Vector3 (m_strength * m_initialScale, m_strength * m_initialScale);
+			anim.SetBool("transferDown", true);
+			yield return new WaitForSeconds(.0001f);
 		}
 
 		IEnumerator Fly()
@@ -272,20 +281,30 @@ namespace HappyFunTimesExample {
 		{
 			transform.localScale = new Vector3(-transform.localScale.x,transform.localScale.y,transform.localScale.z);
 			transform.GetChild(0).localScale = new Vector3(-transform.GetChild(0).localScale.x,transform.GetChild(0).localScale.y,transform.GetChild(0).localScale.z);
+
 		}
 
 		void OnCollisionEnter2D(Collision2D coll)
 		{
 			if (flying)
 			{
+//				Debug.Log ("Die Message Sent by " + m_name);
 				coll.gameObject.SendMessage("Die");
-				Debug.Log ("Die Message Sent by " + m_name);
 			}
 		}
 
 		void Die()
 		{
-			Debug.Log ("Die Message Received by " + m_name);
+			StartCoroutine(DieSequence());
+
+		}
+
+		IEnumerator DieSequence()
+		{
+//			Debug.Log ("Die Message Received by " + m_name);
+			anim.SetBool("transferUp", true);
+//			iTween.MoveAdd(gameObject,new Vector3(0,10,0), 2);
+			yield return new WaitForSeconds(1.75f);
 			m_netPlayer.SendCmd(new MessageDie());
 			gameObject.SetActive(false);
 //			Destroy (gameObject);
