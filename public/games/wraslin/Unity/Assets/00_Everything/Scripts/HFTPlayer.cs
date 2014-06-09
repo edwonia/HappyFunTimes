@@ -279,11 +279,13 @@ namespace HappyFunTimesExample {
 			if (flying)
 			{
 				coll.gameObject.SendMessage("Die");
+				Debug.Log ("Die Message Sent by " + m_name);
 			}
 		}
 
 		void Die()
 		{
+			Debug.Log ("Die Message Received by " + m_name);
 			m_netPlayer.SendCmd(new MessageDie());
 			gameObject.SetActive(false);
 //			Destroy (gameObject);
