@@ -146,6 +146,7 @@ namespace HappyFunTimesExample {
 				{
 	//				transform.position += new Vector3(-moveSpeed,0,0);
 					rigidbody2D.velocity += new Vector2(-moveSpeed,0);
+					Debug.Log ("moveLeft");
 	//				GetComponent<Animator>().SetFloat("Speed", 1);
 					anim.SetFloat("speed",1);
 				}	
